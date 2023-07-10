@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Potato Disease Classification</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  </head>
+  <body>
+    <h1>Potato Disease Classification</h1>
+    <form id="uploadForm" enctype="multipart/form-data">
+      <input type="file" name="image" id="imageInput" accept="image/*" />
+      <button type="button" id="submitBtn">Submit</button>
+    </form>
+    <div id="result"></div>
+
+    <script>
+      $(document).ready(function () {
+        $("#submitBtn").click(function () {
+          var formData = new FormData();
+          var fileInput = $("#imageInput")[0].files[0];
+          formData.append("image", fileInput);
+
+          $.ajax({
+            url: "/predict_Disease", // Replace with your API endpoint
+            type: "POST",
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (response) {
+              $("#result").text("Predicted Disease: " + response);
+            },
+            error: function (xhr, status, error) {
+              console.error(error);
+            },
+          });
+        });
+      });
+    </script>
+  </body>
+</html>

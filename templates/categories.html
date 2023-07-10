@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Image Categories</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f5f5f5;
+        margin: 0;
+        padding: 0;
+      }
+
+      h5 {
+        font-family: "Arial Black", sans-serif;
+        font-size: 24px;
+        color: #333333;
+        text-align: center;
+        margin: 30px 0;
+      }
+
+      .row {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        margin: 0 30px;
+      }
+
+      .image-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin: 10px;
+      }
+
+      .image-container img {
+        width: 200px;
+        height: 200px;
+        border-radius: 25px;
+        transition: transform 0.3s ease-in-out;
+      }
+
+      .image-container img:hover {
+        transform: scale(1.1);
+      }
+
+      .image-caption {
+        font-size: 18px;
+        font-family: "Arial Black", sans-serif;
+        color: #555555;
+        margin-top: 10px;
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <hr style="margin-top: 70px" id="Categories" />
+    <h5>Categories</h5>
+    <hr style="margin-bottom: 20px" />
+
+    <div class="row">
+      <div class="image-container">
+        <img src="../static/images/Early_blight/1.JPG" alt="Early Blight" />
+        <p class="image-caption">Early Blight</p>
+      </div>
+      <div class="image-container">
+        <img src="../static/images/Rugose/3.jpg" alt="Rugose Mosaic Symptom" />
+        <p class="image-caption">Rugose Mosaic Symptom</p>
+      </div>
+      <div class="image-container">
+        <img src="../static/images/flea/3.JPG" alt="Potato Flea Beetle" />
+        <p class="image-caption">Potato Flea Beetle</p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="image-container">
+        <img
+          src="../static/images/colorado/3.JPG"
+          alt="Colorado Potato Beetle"
+        />
+        <p class="image-caption">Colorado Potato Beetle</p>
+      </div>
+      <div class="image-container">
+        <img src="../static/images/PSTV/2.jpg" alt="Mosaic Virus" />
+        <p class="image-caption">Potato PSTV foliar</p>
+      </div>
+      <d<div class="image-container">
+        <img src="../static/images/Late_blight/2.jpg" alt="Late Blight" />
+        <p class="image-caption">Late Blight</p>
+      </div>
+    </div>
+  </body>
+</html>

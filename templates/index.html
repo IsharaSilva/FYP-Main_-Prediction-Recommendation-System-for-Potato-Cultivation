@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Potato Disease Classification</title>
+    <style>
+                   * {
+                     box-sizing: border-box;
+                   }
+
+                   body {
+                     margin: 0;
+                     padding: 0;
+                     font-family: Arial, sans-serif;
+                     background-color: #f5f5f5;
+                   }
+
+                   /* main headder out side */
+                   .header {
+                     background-color: #4caf50;
+                     padding: 10px;
+                     position: fixed;
+                     width: 100%;
+                     top: 0;
+                     z-index: 1;
+                     border-bottom-left-radius: 10px;
+                     border-bottom-right-radius: 10px;
+                     overflow: hidden;
+                     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+                   }
+
+                   .container {
+                     margin: 80px auto;
+                     padding: 10px;
+                     font-family: Arial, sans-serif;
+                     font-size: 18;
+                   }
+
+                   h1 {
+                     color: #2e2e2e;
+                     text-align: center;
+                   }
+
+                   form {
+                     margin-top: 30px;
+                     text-align: center;
+                   }
+
+                   input[type="file"] {
+                     display: none;
+                   }
+
+                   .custom-file-upload {
+                     display: inline-block;
+                     padding: 8px 20px;
+                     background-color: #4caf50;
+                     color: #ffffff;
+                     border-radius: 4px;
+                     cursor: pointer;
+                   }
+
+                   .image-selected-label {
+                     display: none;
+                     margin-top: 10px;
+                     font-size: 18px;
+                     color: #4caf50;
+                     font-weight: bold;
+                   }
+
+                   #classifyBtn {
+                     display: none;
+                     margin-top: 20px;
+                     padding: 10px 30px;
+                     background-color: #4caf50;
+                     color: #ffffff;
+                     border: none;
+                     border-radius: 4px;
+                     cursor: pointer;
+                     font-size: 18px;
+                     font-weight: bold;
+                   }
+
+                   #result {
+                     margin-top: 20px;
+                     font-weight: bold;
+                     font-size: 18px;
+                   }
+
+                   #imagePreview {
+                     margin-top: 20px;
+                     text-align: center;
+                   }
+
+                   /* .nav-bar {
+                     list-style-type: none;
+                     margin: 0;
+                     padding: 0;
+                     display: flex;
+                     justify-content: space-between;
+                     align-items: center;
+                     background-color: #caf15e;
+                     height: 30px;
+                     font-family: "Arial", sans-serif;
+                     border-bottom-left-radius: 30px;
+                     border-bottom-right-radius: 30px;
+                   } */
+
+                   .nav-bar li a {
+                     color: #ffffff;
+                     text-decoration: none;
+                     padding: 8px 15px;
+                     font-weight: bold;
+                     font-size: 16px;
+
+                     position: relative;
+                     animation: moveLeftToRight 15s linear infinite;
+                   }
+
+
+               @keyframes moveLeftToRight {
+                 0% {
+               left: -100%;
+             }
+             100% {
+               left: 100%;
+             }
+               }
+
+                   .nav-bar li.logo a {
+                     color: #ffffff;
+                     font-size: 20px;
+                     text-align: center;
+                     list-style-type: none;
+                   }
+
+                   .nav-bar li a:hover {
+                     background-color: #398439;
+                     text-align: center;
+                     list-style-type: none;
+                   }
+
+                   .nav-bar li.logo a:hover {
+                     background-color: transparent;
+                     text-align: center;
+                     list-style-type: none;
+                   }
+                   .nav-bar{
+                    list-style-type: none;
+                   }
+
+                   .footer {
+                     background-color: #4caf50;
+                     padding: 20px;
+                     margin-top: 60px;
+                     color: #ffffff;
+                     font-family: Arial, sans-serif;
+                     text-align: center;
+                   }
+
+                   .footer p {
+                     font-size: 16px;
+                     line-height: 1.5;
+                     text-align: justify;
+
+                   }
+
+                   .footer img {
+                     width: 30px;
+                     margin: 5px;
+                     filter: invert(1%) sepia(99%) saturate(1582%) hue-rotate(118deg)
+                       brightness(103%) contrast(101%);
+                   }
+
+                   .footer-links {
+                     display: flex;
+                     justify-content: center;
+                     margin-top: 20px;
+                   }
+
+                   .footer-links a {
+                     color: #ffffff;
+                     text-decoration: none;
+                     margin: 0 10px;
+                     font-size: 14px;
+                     font-weight: bold;
+                   }
+
+                   .footer-links a:hover {
+                     text-decoration: underline;
+                   }
+
+                   .footer-content {
+                     max-width: 800px;
+                     margin: 0 auto;
+                   }
+
+                   #about-us {
+                     background-color: #4caf50;
+                     padding: 40px;
+                     margin-top: 60px;
+                   }
+
+                   #about-us p {
+                     font-size: 17px;
+                     line-height: 1.5;
+                     color: #ffffff;
+                     text-align: center;
+                   }
+
+                   /* large backgraound */
+                   .main-header {
+                     background-color: #c7f3c7;
+                   }
+                   .green-text {
+                     text-align: center;
+                     color: rgb(2, 58, 2);
+                     font-family: "Comic Sans MS";
+                   }
+                   .para{
+                     font-family:"font-family: Arial, sans-serif";
+                     font-size: 16px;
+                     line-height: 1.5;
+                     color: #333333";
+                   }
+
+                   /*  */
+        .popup {
+             display: none;
+             position: fixed;
+             top: 0;
+             left: 0;
+             width: 100%;
+             height: 100%;
+             background-color: rgba(0, 0, 0, 0.5);
+             z-index: 9999;
+           }
+
+           .popup-content {
+             display: flex;
+             flex-wrap: wrap;
+             justify-content: center;
+             align-items: center;
+             height: 100%;
+           }
+
+           .popup-image {
+             margin: 10px;
+             max-width: 300px;
+             max-height: 300px;
+           }
+
+           .center-button {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        /* height: 100vh; */
+      }
+
+      .center-button button {
+        font-size: 16px;
+        padding: 10px 20px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      }
+
+                   /*  */
+    </style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js">
+
+
+      //
+
+          function showPopup() {
+            var popup = document.getElementById("popup");
+            popup.style.display = "block";
+          }
+
+          function hidePopup() {
+            var popup = document.getElementById("popup");
+            popup.style.display = "none";
+          }
+
+
+      //
+    </script>
+  </head>
+
+  <body>
+    <div class="main-header">
+      <div class="header">
+        <ul class="nav-bar">
+          <li class="logo">
+            <a href="#">POTATO LEAVES CLASIFICATION SYSTEM</a>
+          </li>
+        </ul>
+      </div>
+      <div class="container">
+        <h1>Potato Disease Classification</h1>
+        <form id="uploadForm" enctype="multipart/form-data">
+          <label
+            for="imageInput"
+            id="imageInputLabel"
+            class="custom-file-upload"
+            >Choose an image</label
+          >
+          <input type="file" name="image" id="imageInput" accept="image/*" />
+          <button type="submit" id="classifyBtn">Classify Disease</button>
+        </form>
+        <div id="result"></div>
+        <div id="imagePreview"></div>
+      </div>
+
+      <script>
+        $(document).ready(function () {
+          $("#imageInput").change(function () {
+            var input = $(this)[0];
+            if (input.files && input.files[0]) {
+              var reader = new FileReader();
+              reader.onload = function (e) {
+                $("#imagePreview").html(
+                  '<img src="' +
+                    e.target.result +
+                    '" alt="Uploaded Image" width="300" height="200"/>'
+                );
+              };
+              reader.readAsDataURL(input.files[0]);
+
+              $("#imageInputLabel").text("Image Selected");
+              $("#imageInputLabel").css("display", "none");
+              $("#classifyBtn").css("display", "inline-block");
+              $("#imageSelectedLabel").css("display", "inline-block");
+              $("#result").empty();
+            }
+          });
+
+          $("#uploadForm").submit(function (event) {
+            event.preventDefault();
+            var formData = new FormData();
+            var fileInput = $("#imageInput")[0].files[0];
+            formData.append("image", fileInput);
+
+            $.ajax({
+              url: "/predict_Disease", // Replace with your API endpoint
+              type: "POST",
+              data: formData,
+              processData: false,
+              contentType: false,
+              success: function (response) {
+                if (response === "healthy") {
+                  $("#result").text("Predicted Disease: " + response);
+                  var newDiv = $("#result").html(
+                    '<hr style="margin-top:50px">' +
+                      '<div class="row center">' +
+                      '<h5 class="header col s12 light">' +
+                      "Disease prediction" +
+                      "</h5>" +
+                      "</div>" +
+                      '<h3 class="green-text" style="text-align: center" >Healthy Leaf</h3>' +
+                      '<hr style="margin-bottom:20px">' +
+                      '<div class="row center">' +
+                      '<div class="input-field col s4">' +
+                      '<img onmouseover="this.style.transform=\'scale(1.3)\'" onmouseout="this.style.transform=\'scale(1)\'" style="transition: transform 0.3s ease-in-out;box-shadow: 0 30px 40px rgba(0,0,0,0.15);border-radius: 25px;width:200px;aspect-ratio:1" src="../static/images/Healthy/1.jpg">' +
+                      "</div>" +
+                      '<div class="input-field col s4">' +
+                      '<img onmouseover="this.style.transform=\'scale(1.3)\'" onmouseout="this.style.transform=\'scale(1)\'" style="transition: transform 0.3s ease-in-out;box-shadow: 0 30px 40px rgba(0,0,0,0.15);border-radius: 25px;width:200px;aspect-ratio:1" src="../static/images/Healthy/2.jpg">' +
+                      "</div>" +
+                      '<div class="input-field col s4">' +
+                      '<img onmouseover="this.style.transform=\'scale(1.3)\'" onmouseout="this.style.transform=\'scale(1)\'" style="transition: transform 0.3s ease-in-out;box-shadow: 0 30px 40px rgba(0,0,0,0.15);border-radius: 25px;width:200px;aspect-ratio:1" src="../static/images/Healthy/3.jpg">' +
+                      "</div>" +
+                      "</div>"
+                  );
+
+                  $(newDiv).insertAfter("#imagePreview");
+                } else if (response === "Early_blight") {
+                  $("#result").text("Predicted Disease: " + response);
+                  var newDiv = $("#result").html(`
+                  <hr style="margin-top: 50px">
+                  
+                  <h3 class=" green-text" style="text-align: center">Potato Early Blight</h3>
+                  <hr style="margin-bottom: 20px">
+
+                <div class="row">
+                    <div class="input-field col s4">
+                        <img onmouseover="this.style.transform='scale(1.3)'" onmouseout="this.style.transform='scale(1)'" style="transition: transform 0.3s ease-in-out;box-shadow: 0 30px 40px rgba(0,0,0,0.15);border-radius: 25px;width:200px;aspect-ratio:1" src="../static/images/Early_blight/1.jpg">
+                    </div>
+                    <div class="input-field col s4">
+                        <img onmouseover="this.style.transform='scale(1.3)'" onmouseout="this.style.transform='scale(1)'" style="transition: transform 0.3s ease-in-out;box-shadow: 0 30px 40px rgba(0,0,0,0.15);border-radius: 25px;width:200px;aspect-ratio:1" src="../static/images/Early_blight/2.jpg">
+                    </div>
+                    <div class="input-field col s4">
+                        <img onmouseover="this.style.transform='scale(1.3)'" onmouseout="this.style.transform='scale(1)'" style="transition: transform 0.3s ease-in-out;box-shadow: 0 30px 40px rgba(0,0,0,0.15);border-radius: 25px;width:200px;aspect-ratio:1" src="../static/images/Early_blight/3.jpg">
+                    </div>
+                </div>
+
+                <div class="para">
+                    <h5 class="green-text">Introduction</h5>
+                 
+                    <p style="font-size: 17px;line-height: 1.5">
+                        Early blight of potato is caused by the fungal pathogen Alternaria solani. The disease affects leaves, stems and tubers and can reduce yield, tuber size, storability of tubers, quality of fresh-market and processing tubers and marketability of the crop.
+                    </p>
+                 
+                    <h5 class="green-text">Identification</h5>
+                    <ul style="font-size: 17px, text-align=left">
+                        <li>Small, dark brown to black lesions appear on the lower leaves first</li>
+                        <li>Lesions have concentric rings and may have a target-like appearance.</li>
+                        <li>Lesions enlarge and develop irregular edges.</li>
+                        <li>Leaves turn yellow and die prematurely.</li>
+                        <li>Dark brown to black lesions can be seen on stems and petioles</li>
+                        <li>Infected tubers develop dark, sunken lesions with concentric rings.</li>
+                    </ul>
+
+                    <h5 class="green-text">Managing and Treatment</h5>
+                    <ul style="font-size: 17px">
+                        <li>Rotate potato crops with non-host plants to reduce disease pressure.</li>
+                        <li>Remove and destroy infected plant debris to minimize overwintering of the pathogen.</li>
+                        <li>Practice good sanitation to prevent the spread of the disease.</li>
+                        <li>Avoid excessive nitrogen fertilization, as it can promote disease development.</li>
+                        <li>Apply fungicides preventively during periods of high disease pressure.</li>
+                        <li>Follow the instructions and recommendations provided by local agricultural extension services.</li>
+                        <li>Consult with local experts or agricultural extension services for information on resistant varieties suitable for your area.</li>
+                    </ul>
+                </div>
+`);
+
+                  $(newDiv).insertAfter("#imagePreview");
+                } else if (response === "Late_blight") {
+                  $("#result").text("Predicted Disease: " + response);
+                  var newDiv = $("#result").html(`
+                  <hr style="margin-top: 50px">
+                  
+                  <h3 class=" green-text" style="text-align: center">Potato Late Blight</h3>
+                  <hr style="margin-bottom: 20px">
+
+                <div class="row">
+                    <div class="input-field col s4">
+                        <img onmouseover="this.style.transform='scale(1.3)'" onmouseout="this.style.transform='scale(1)'" style="transition: transform 0.3s ease-in-out;box-shadow: 0 30px 40px rgba(0,0,0,0.15);border-radius: 25px;width:200px;aspect-ratio:1" src="../static/images/Late_blight/1.jpg">
+                    </div>
+                    <div class="input-field col s4">
+                        <img onmouseover="this.style.transform='scale(1.3)'" onmouseout="this.style.transform='scale(1)'" style="transition: transform 0.3s ease-in-out;box-shadow: 0 30px 40px rgba(0,0,0,0.15);border-radius: 25px;width:200px;aspect-ratio:1" src="../static/images/Late_blight/2.jpg">
+                    </div>
+                    <div class="input-field col s4">
+                        <img onmouseover="this.style.transform='scale(1.3)'" onmouseout="this.style.transform='scale(1)'" style="transition: transform 0.3s ease-in-out;box-shadow: 0 30px 40px rgba(0,0,0,0.15);border-radius: 25px;width:200px;aspect-ratio:1" src="../static/images/Late_blight/3.jpg">
+                    </div>
+                </div>
+
+                <div class="para">
+                    <h5 class="green-text">Introduction</h5>
+                    <p style="font-size: 17px;line-height: 1.5">
+                         Potato late blight, caused by the pathogen Phytophthora infestans, is one of the most destructive diseases affecting potatoes worldwide.The disease can spread rapidly and cause severe damage to potato foliage, stems, and tubers. It thrives in cool, moist conditions, making it a significant threat in regions with temperate climates.Late blight can lead to significant yield losses, affect tuber quality, and impact potato production and marketability.
+
+                    <h5 class="green-text">Identification</h5>
+                    <ul style="font-size: 17px, text-align=left">
+                        <li> Initially, dark, water-soaked lesions appear on the leaves, typically starting at the tips or margins.</li>
+                        <li>Lesions rapidly expand, turning brown to black and often surrounded by a yellow halo.</li>
+                        <li>Infected leaves may become yellow and eventually fall off, leading to defoliation</li>
+                        <li> Under moist conditions, a fuzzy, grayish-white moldy growth (sporangia) may develop on the lesions.</li>
+                        <li>Infected tubers develop dark, firm lesions, usually starting from the stolon end or through wounds.</li>
+                    </ul>
+
+                    <h5 class="green-text">Managing and Treatment</h5>
+                    <ul style="font-size: 17px">
+                        <li>Plant potato varieties that have been bred for resistance to late blight.</li>
+                        <li> Resistant varieties offer effective protection against the disease and can reduce the need for chemical control measures.</li>
+                        <li>Apply fungicides preventively to protect plants from infection.</li>
+                        <li>Remove and destroy infected plant material to prevent the spread of the disease</li>
+                        <li> Follow the fungicide application schedule and dosage rates recommended for your region.</li>
+                        <li> Regularly monitor potato plants for signs of late blight symptoms.</li>
+                        <li>Avoid overhead irrigation to prevent water from sitting on the leaves, which can promote fungal growth</li>
+                    </ul>
+                </div>
+`);
+
+                  $(newDiv).insertAfter("#imagePreview");
+                } else if (response === "PSTV") {
+                  $("#result").text("Predicted Disease: " + response);
+                  var newDiv = $("#result").html(`
+                  <hr style="margin-top: 50px">
+                  
+                  <h3 class=" green-text" style="text-align: center">PSTV foliar symptoms</h3>
+                  <hr style="margin-bottom: 20px">
+
+                <div class="row">
+                    <div class="input-field col s4">
+                        <img onmouseover="this.style.transform='scale(1.3)'" onmouseout="this.style.transform='scale(1)'" style="transition: transform 0.3s ease-in-out;box-shadow: 0 30px 40px rgba(0,0,0,0.15);border-radius: 25px;width:200px;aspect-ratio:1" src="../static/images/PSTV/1.jpg">
+                    </div>
+                    <div class="input-field col s4">
+                        <img onmouseover="this.style.transform='scale(1.3)'" onmouseout="this.style.transform='scale(1)'" style="transition: transform 0.3s ease-in-out;box-shadow: 0 30px 40px rgba(0,0,0,0.15);border-radius: 25px;width:200px;aspect-ratio:1" src="../static/images/PSTV/2.jpg">
+                    </div>
+                    <div class="input-field col s4">
+                        <img onmouseover="this.style.transform='scale(1.3)'" onmouseout="this.style.transform='scale(1)'" style="transition: transform 0.3s ease-in-out;box-shadow: 0 30px 40px rgba(0,0,0,0.15);border-radius: 25px;width:200px;aspect-ratio:1" src="../static/images/PSTV/3.jpg">
+                    </div>
+                </div>
+
+                <div class="para">
+                    <h5 class="green-text">Introduction</h5>
+                    <p style="font-size: 17px;line-height: 1.5">
+                         Potato PSTV is a viroid, a small, single-stranded RNA pathogen that affects potato plants. It primarily infects the tubers, but can also cause foliar symptoms. PSTV can lead to reduced yield and quality of potato crops if left unmanaged.
+                    </p>
+
+                    <h5 class="green-text">Identification</h5>
+                    <ul style="font-size: 17px, text-align=left">
+                         <li>Affected leaves show a mosaic pattern of light and dark green areas.</li>
+      <li>Mosaic patterns can be irregular or form distinct concentric rings.</li>
+      <li>Veins may appear thickened or swollen.</li>
+      <li>In severe cases, leaves can become distorted and crinkled.</li>
+      <li>Symptoms may vary depending on potato variety and environmental conditions.</li>
+      <li>Start with certified disease-free seed potatoes to reduce the risk of PSTV infection.</li>
+      <li>Purchase seed from reputable sources and ensure it has undergone proper testing and certification.</li>
+                    </ul>
+
+                    <h5 class="green-text">Managing and Treatment</h5>
+                    <ul style="font-size: 17px">
+                         <li>Conduct regular testing of seed potatoes and plants for PSTV.</li>
+                        <li>Diagnostic tests can help identify infected plants and prevent further spread.</li>
+                        <li>Maintain a vigilant monitoring system to detect symptoms early and take appropriate action.</li>
+                        <li>Practice proper crop rotation to break the disease cycle.</li>
+                        <li>Avoid planting potatoes in fields recently used for potatoes or other susceptible crops.</li>
+                        <li>Remove and destroy any infected plant debris, including volunteer plants and weeds.</li>
+                        <li>Clean and disinfect equipment, tools, and storage facilities to prevent contamination.</li>
+                    </ul>
+                </div>
+`);
+
+                  $(newDiv).insertAfter("#imagePreview");
+                } else if (response === "Rugose") {
+                  $("#result").text("Predicted Disease: " + response);
+                  var newDiv = $("#result").html(`
+                  <hr style="margin-top: 50px">
+                  
+                  <h3 class=" green-text" style="text-align: center">Rugose mosaic symptom</h3>
+                  <hr style="margin-bottom: 20px">
+
+                <div class="row">
+                    <div class="input-field col s4">
+                        <img onmouseover="this.style.transform='scale(1.3)'" onmouseout="this.style.transform='scale(1)'" style="transition: transform 0.3s ease-in-out;box-shadow: 0 30px 40px rgba(0,0,0,0.15);border-radius: 25px;width:200px;aspect-ratio:1" src="../static/images/Rugose/1.jpg">
+                    </div>
+                    <div class="input-field col s4">
+                        <img onmouseover="this.style.transform='scale(1.3)'" onmouseout="this.style.transform='scale(1)'" style="transition: transform 0.3s ease-in-out;box-shadow: 0 30px 40px rgba(0,0,0,0.15);border-radius: 25px;width:200px;aspect-ratio:1" src="../static/images/Rugose/2.jpg">
+                    </div>
+                    <div class="input-field col s4">
+                        <img onmouseover="this.style.transform='scale(1.3)'" onmouseout="this.style.transform='scale(1)'" style="transition: transform 0.3s ease-in-out;box-shadow: 0 30px 40px rgba(0,0,0,0.15);border-radius: 25px;width:200px;aspect-ratio:1" src="../static/images/Rugose/3.jpg">
+                    </div>
+                </div>
+
+                <div class="para">
+                    <h5 class="green-text">Introduction</h5>
+                    <p style="font-size: 17px;line-height: 1.5">
+                         Rugose mosaic is a viral disease that affects various plant species, including tomatoes, peppers, and other crops. The disease is caused by the Tobacco mosaic virus (TMV) and belongs to the Tobamovirus genus. Rugose mosaic can cause significant yield losses and impact the overall health and marketability of infected plants. It is characterized by distinct symptoms on leaves and fruits, making it important to identify and manage the disease promptly.
+                    </p>
+
+                    <h5 class="green-text">Identification</h5>
+                    <ul style="font-size: 17px, text-align=left">
+                        <li>Leaves exhibit a mosaic pattern of light and dark green areas.</li>
+                        <li>Leaves may also show puckering, curling, or blistering.</li>
+                        <li>The mosaic pattern may be irregular or form distinct angular or wrinkled patterns.</li>
+                        <li>In severe cases, the foliage may become stunted and distorted./li>
+                    </ul>
+
+                    <h5 class="green-text">Managing and Treatment</h5>
+                    <ul style="font-size: 17px">
+                        <li>Practice good sanitation measures in the field and greenhouse</li>
+                        <li>Remove and destroy infected plant debris, including weeds and volunteer plants.</li>
+                        <li>Clean and disinfect tools, equipment, and surfaces to prevent virus transmission.</li>
+                        <li>Resistant varieties can provide effective protection against rugose mosaic.</li>
+                        <li>Monitor and implement control measures based on local recommendations and pest dynamics.</li>
+                        <li>Control weeds in and around the growing area.</li>
+                        <li>Use virus-free seeds and transplants.</li>
+                    </ul>
+                </div>
+`);
+
+                  $(newDiv).insertAfter("#imagePreview");
+                } else if (response === "Colorado") {
+                  $("#result").text("Predicted Disease: " + response);
+                  var newDiv = $("#result").html(`
+                  <hr style="margin-top: 50px">
+                  
+                  <h3 class=" green-text" style="text-align: center">Colorado potato beetle</h3>
+                  <hr style="margin-bottom: 20px">
+
+                <div class="row">
+                    <div class="input-field col s4">
+                        <img onmouseover="this.style.transform='scale(1.3)'" onmouseout="this.style.transform='scale(1)'" style="transition: transform 0.3s ease-in-out;box-shadow: 0 30px 40px rgba(0,0,0,0.15);border-radius: 25px;width:200px;aspect-ratio:1" src="../static/images/colorado/1.jpg">
+                    </div>
+                    <div class="input-field col s4">
+                        <img onmouseover="this.style.transform='scale(1.3)'" onmouseout="this.style.transform='scale(1)'" style="transition: transform 0.3s ease-in-out;box-shadow: 0 30px 40px rgba(0,0,0,0.15);border-radius: 25px;width:200px;aspect-ratio:1" src="../static/images/colorado/2.jpg">
+                    </div>
+                    <div class="input-field col s4">
+                        <img onmouseover="this.style.transform='scale(1.3)'" onmouseout="this.style.transform='scale(1)'" style="transition: transform 0.3s ease-in-out;box-shadow: 0 30px 40px rgba(0,0,0,0.15);border-radius: 25px;width:200px;aspect-ratio:1" src="../static/images/colorado/3.jpg">
+                    </div>
+                </div>
+
+                <div class="para">
+                    <h5 class="green-text">Introduction</h5>
+                    <p style="font-size: 17px;line-height: 1.5">
+                         The Colorado potato beetle (Leptinotarsa decemlineata) is a major potato pest throughout North America. Adults become active in spring, about the same time potato plants emerge from the ground. Larvae and adults feed on leaves and can completely defoliate plants.
+                    </p>
+
+                    <h5 class="green-text">Identification</h5>
+                    <ul style="font-size: 17px, text-align=left">
+                        <li>Adult beetles are oval-shaped and approximately 10 mm long.</li>
+                        <li>They have a yellow to orange-brown body with ten black stripes on their wing covers.</li>
+                        <li>Beetles have a characteristic humpbacked appearance.</li>
+                        <li>One of the key symptoms of Colorado potato beetle infestation is extensive defoliation of potato plants.</li>
+                    </ul>
+
+                    <h5 class="green-text">Managing and Treatment</h5>
+                    <ul style="font-size: 17px">
+                        <li>Implement crop rotation by avoiding planting potatoes in the same area year after year</li>
+                        <li>Remove and destroy any remaining plant material after harvest to reduce overwintering sites for beetles</li>
+                        <li>Encourage natural predators and parasites of Colorado potato beetles, such as ladybugs, ground beetles, and parasitic wasps.</li>
+                        <li>Consider using microbial insecticides containing Bacillus thuringiensis (Bt) specific to Colorado potato beetles.</li>
+                        <li>Handpick and crush adult beetles, larvae, and eggs when infestations are localized or small in scale.</li>
+                        <li>If infestations are severe or widespread, chemical insecticides can be used as a last resort.</li>
+                        <li>Plant potatoes early in the growing season to avoid the peak population of Colorado potato beetles.</li>
+                    </ul>
+                </div>
+`);
+
+                  $(newDiv).insertAfter("#imagePreview");
+                } else if (response === "Insect_Fleabeetle") {
+                  $("#result").text("Predicted Disease: " + response);
+                  var newDiv = $("#result").html(`
+                  <hr style="margin-top: 50px">
+                  
+                  <h3 class=" green-text" style="text-align: center">Potato flea beetle</h3>
+                  <hr style="margin-bottom: 20px">
+
+                <div class="row">
+                    <div class="input-field col s4">
+                        <img onmouseover="this.style.transform='scale(1.3)'" onmouseout="this.style.transform='scale(1)'" style="transition: transform 0.3s ease-in-out;box-shadow: 0 30px 40px rgba(0,0,0,0.15);border-radius: 25px;width:200px;aspect-ratio:1" src="../static/images/flea/1.jpg">
+                    </div>
+                    <div class="input-field col s4">
+                        <img onmouseover="this.style.transform='scale(1.3)'" onmouseout="this.style.transform='scale(1)'" style="transition: transform 0.3s ease-in-out;box-shadow: 0 30px 40px rgba(0,0,0,0.15);border-radius: 25px;width:200px;aspect-ratio:1" src="../static/images/flea/2.jpg">
+                    </div>
+                    <div class="input-field col s4">
+                        <img onmouseover="this.style.transform='scale(1.3)'" onmouseout="this.style.transform='scale(1)'" style="transition: transform 0.3s ease-in-out;box-shadow: 0 30px 40px rgba(0,0,0,0.15);border-radius: 25px;width:200px;aspect-ratio:1" src="../static/images/flea/3.jpg">
+                    </div>
+                </div>
+
+                <div class="para">
+                    <h5 class="green-text">Introduction</h5>
+                    <p style="font-size: 17px;line-height: 1.5">
+                         The potato flea beetle is primarily a pest of potato but it also attacks cucumber, eggplant, pepper, tomato and such other plants as jimsonweed, tobacco, large white petunia, groundcherry and bittersweet. The potato flea beetle adult is small, 1.7 mm in length and 1 mm wide. It is black with brown legs and antennae.
+                    </p>
+
+                    <h5 class="green-text">Identification</h5>
+                    <ul style="font-size: 17px, text-align=left">
+                        <li>Flea beetles feed on the leaves, resulting in small, round holes or pits.</li>
+                        <li>Leaves may appear speckled or pockmarked due to their feeding activity./li>
+                        <li>Damage is often more severe on young plants or in areas with high beetle populations.</li>
+                        <li>They feed on the roots and tubers of potato plants, causing underground damage.</li>
+                    </ul>
+
+                    <h5 class="green-text">Managing and Treatment</h5>
+                    <ul style="font-size: 17px">
+                        <li>Remove and destroy any crop debris after harvest to reduce overwintering sites for beetles.</li>
+                        <li>Implement crop rotation by avoiding planting potatoes in the same area year after year.</li>
+                        <li>Use floating row covers or screens to physically prevent adult beetles from reaching the plants.</li>
+                        <li>Install barriers around young plants to protect them during the early stages of growth.</li>
+                        <li>Regularly monitor plants for signs of flea beetle infestation, especially during the early stages.s</li>
+                        <li>Inspect the underside of leaves for adult beetles, eggs, or larvae.</li>
+                        <li>Encourage natural predators of flea beetles, such as ladybugs, lacewings, or parasitic wasps.</li>
+                    </ul>
+                </div>
+`);
+
+                  $(newDiv).insertAfter("#imagePreview");
+                } else {
+                  $("#result").text("Predicted Disease: " + response);
+                }
+                resetForm();
+              },
+              error: function (xhr, status, error) {
+                console.error(error);
+                resetForm();
+              },
+            });
+          });
+
+          function resetForm() {
+            $("#imageInput").val("");
+            $("#imageInputLabel").text("Choose an image");
+            $("#imageInputLabel").css("display", "inline-block");
+            $("#classifyBtn").css("display", "none");
+            $("#imageSelectedLabel").css("display", "none");
+          }
+        });
+      </script>
+      <div id="imagePreview"></div>
+      <div id="result"></div>
+
+      {% include categories %}
+      <div class="footer">
+        <div class="footer-content">
+          <p>
+            "We are Team Spycies, a group of four final year students from the
+            Faculty of Information Technology, University of Moratuwa. Together,
+            we are working on a research project to identify potato diseases
+            using image processing and machine learning. Our goal as Team
+            Spycies is to develop a system that can accurately diagnose and
+            classify different diseases affecting potato plants, employing
+            computer vision techniques and advanced algorithms. Through this
+            endeavor, we aim to contribute to the field of agricultural
+            technology and assist farmers in improving their crop yield and
+            quality. We sincerely appreciate your visit to our website and the
+            support you have shown towards Team Spycies and our work."
+          </p>
+        </div>
+        <div class="footer-links">
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms of Service</a>
+          <a href="#">Contact</a>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
